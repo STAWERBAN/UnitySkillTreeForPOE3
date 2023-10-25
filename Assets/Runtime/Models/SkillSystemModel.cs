@@ -44,8 +44,7 @@ namespace PathOfExile3.Runtime.Models
         {
             var skill = GetSkillPoint(skillConfig);
             var childSkills = skill.GetChildSkill();
-            var headerSkill = skill.GetHeaderSkill();
-            return headerSkill.Length > 0 && childSkills.Any(IsSkillActive);
+            return !skill.IsPersistent() && (childSkills.Any(IsSkillActive) || childSkills.Length == 0);
         }
 
         private Skill GetSkillFromDictionary(BaseSkillConfig skillConfig)

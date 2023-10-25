@@ -4,7 +4,11 @@ namespace PathOfExile3.Runtime.Models
 {
     public class SkillWallet
     {
+        public event Action<int> BalanceChanged = delegate { };
+
         private int _balance;
+
+        public int Balance => _balance;
 
         public SkillWallet(int balance)
         {
@@ -29,6 +33,8 @@ namespace PathOfExile3.Runtime.Models
             }
 
             _balance -= amount;
+
+            BalanceChanged.Invoke(_balance);
         }
 
         public void Put(int amount)
@@ -37,8 +43,10 @@ namespace PathOfExile3.Runtime.Models
             {
                 throw new ArgumentException("Amount can not be negative", nameof(amount));
             }
-            
+
             _balance += amount;
+
+            BalanceChanged.Invoke(_balance);
         }
     }
 }

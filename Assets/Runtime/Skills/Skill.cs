@@ -13,14 +13,20 @@ namespace PathOfExile3.Runtime.Skills.Points
         public Skill(SkillConfig skillConfig)
         {
             _skillConfig = skillConfig;
+            _isActive = skillConfig.IsPersistent;
         }
 
-        public virtual void Activate()
+        public void Activate()
         {
             _isActive = true;
         }
 
-        public virtual void Deactivate()
+        public bool IsPersistent()
+        {
+            return _skillConfig.IsPersistent;
+        }
+
+        public void Deactivate()
         {
             _isActive = false;
         }

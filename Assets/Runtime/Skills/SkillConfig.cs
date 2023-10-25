@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PathOfExile3.Runtime.Skills.Configs
 {
@@ -11,11 +12,13 @@ namespace PathOfExile3.Runtime.Skills.Configs
         [SerializeField] private string _description;
         [SerializeField] private List<BaseSkillConfig> _headerSkills;
         [SerializeField] private List<BaseSkillConfig> _childSkills;
+        [FormerlySerializedAs("_isPersistant")] [SerializeField] private bool isPersistent;
 
         public int Cost => _cost;
         public string Description => _description;
         public BaseSkillConfig[] ChildSkills => _childSkills.ToArray();
         public BaseSkillConfig[] HeaderSkills => _headerSkills.ToArray();
+        public bool IsPersistent => isPersistent;
 
         #region EditorTools
 

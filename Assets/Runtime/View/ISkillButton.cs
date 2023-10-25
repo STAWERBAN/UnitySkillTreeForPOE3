@@ -6,6 +6,9 @@ namespace PathOfExile3.Runtime.View
 {
     public interface ISkillButton
     {
-        public event Action<BaseSkillConfig> OnButtonClick;
+        public BaseSkillConfig SkillConfig { get; }
+        public event Action<BaseSkillConfig, ISkillButton> OnButtonClick;
+        public void ActivateSkillStateVisualization();
+        public void DeactivateSkillStateVisualization();
     }
 }

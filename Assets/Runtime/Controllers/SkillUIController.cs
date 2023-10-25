@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using PathOfExile3.Runtime.Models;
 using PathOfExile3.Runtime.Skills;
 using PathOfExile3.Runtime.Skills.Configs;
-using PathOfExile3.Runtime.Skills.Points;
 using PathOfExile3.Runtime.View;
 
 namespace PathOfExile3.Runtime.Controllers
@@ -12,17 +12,48 @@ namespace PathOfExile3.Runtime.Controllers
         private SkillSystemView _skillSystemView;
         private SkillSystem _skillSystem;
         private SkillPanelView _skillPanelView;
-        private SkillWallet _systemWallet;
+        private SkillWallet _skillWallet;
 
         private BaseSkillConfig _currentSkillConfig;
+        private Dictionary<BaseSkillConfig, ISkillButton> _skillButtonDictionary = new();
 
         public SkillUIController(SkillSystemView skillSystemView,
-            SkillSystem skillSystem, SkillPanelView skillPanelView, SkillWallet systemWallet)
+            SkillSystem skillSystem, SkillPanelView skillPanelView, SkillWallet skillWallet)
         {
             _skillSystemView = skillSystemView;
             _skillSystem = skillSystem;
             _skillPanelView = skillPanelView;
-            _systemWallet = systemWallet;
+            _skillWallet = skillWallet;
+        }
+
+        public void Init()
+        {
+            foreach (var skillButtonView in _skillSystemView.SkillButtonViews)
+            {
+                skillButtonView.OnButtonClick += HandleSkillButtonClick;
+                
+                _skillButtonDictionary.Add(skillButtonView.SkillConfig, skillButtonView);
+
+                if (_skillSystem.GetSkill(skillButtonView.SkillConfig).IsActive)
+                {
+                    skillButtonView.ActivateSkillStateVisualization();
+                }
+                else
+                {
+                    skillButtonView.DeactivateSkillStateVisualization();
+                }
+            }
+
+            _skillPanelView.BuyButton.onClick.AddListener(HandleBuyButtonClick);
+            _skillPanelView.ResetButton.onClick.AddListener(HandleResetClick);
+            _skillPanelView.CloseButton.onClick.AddListener(CloseSkillDescriptionPanel);
+            _skillSystemView.ShowSkillTreeButton.onClick.AddListener(ChangeShowSkillTreeState);
+            _skillSystemView.AddSkillPointButton.onClick.AddListener(IncreaseBalance);
+
+            _skillWallet.BalanceChanged += OnBalanceChanged;
+            _skillSystem.SkillStateChanged += OnSkillSettingChanged;
+
+            _skillSystemView.SkillBalanceText.text = _skillWallet.Balance.ToString();
         }
 
         public void Dispose()
@@ -33,34 +64,38 @@ namespace PathOfExile3.Runtime.Controllers
             }
 
             _skillPanelView.BuyButton.onClick.RemoveListener(HandleBuyButtonClick);
-            _skillPanelView.ResetButton.onClick.RemoveListener(HandleBuyResetClick);
+            _skillPanelView.ResetButton.onClick.RemoveListener(HandleResetClick);
             _skillPanelView.CloseButton.onClick.RemoveListener(CloseSkillDescriptionPanel);
+            _skillSystemView.ShowSkillTreeButton.onClick.RemoveListener(ChangeShowSkillTreeState);
+            _skillSystemView.AddSkillPointButton.onClick.RemoveListener(IncreaseBalance);
+
+            _skillWallet.BalanceChanged -= OnBalanceChanged;
         }
 
-        public void Init()
+        private void ChangeShowSkillTreeState()
         {
-            foreach (var skillButtonView in _skillSystemView.SkillButtonViews)
-            {
-                skillButtonView.OnButtonClick += HandleSkillButtonClick;
-            }
+            var skillTree = _skillSystemView.SkillTreeRoot;
 
-            _skillPanelView.BuyButton.onClick.AddListener(HandleBuyButtonClick);
-            _skillPanelView.ResetButton.onClick.AddListener(HandleBuyResetClick);
-            _skillPanelView.CloseButton.onClick.AddListener(CloseSkillDescriptionPanel);
+            skillTree.SetActive(!skillTree.activeSelf);
+        }
+
+        private void OnBalanceChanged(int balance)
+        {
+            _skillSystemView.SkillBalanceText.text = balance.ToString();
         }
 
         private void HandleBuyButtonClick()
         {
-            _systemWallet.Withdraw(_skillSystem.GetSkill(_currentSkillConfig).GetCost());
-            _skillSystem.DeactivateSkill(_currentSkillConfig);
+            _skillWallet.Withdraw(_skillSystem.GetSkill(_currentSkillConfig).GetCost());
+            _skillSystem.ActivateSkill(_currentSkillConfig);
 
             CloseSkillDescriptionPanel();
         }
 
-        private void HandleBuyResetClick()
+        private void HandleResetClick()
         {
-            _systemWallet.Put(_skillSystem.GetSkill(_currentSkillConfig).GetCost());
-            _skillSystem.ActivateSkill(_currentSkillConfig);
+            _skillWallet.Put(_skillSystem.GetSkill(_currentSkillConfig).GetCost());
+            _skillSystem.DeactivateSkill(_currentSkillConfig);
 
             CloseSkillDescriptionPanel();
         }
@@ -71,7 +106,7 @@ namespace PathOfExile3.Runtime.Controllers
             _skillPanelView.gameObject.SetActive(false);
         }
 
-        private void HandleSkillButtonClick(BaseSkillConfig skillConfig)
+        private void HandleSkillButtonClick(BaseSkillConfig skillConfig, ISkillButton selectedButton)
         {
             _currentSkillConfig = skillConfig;
 
@@ -97,7 +132,7 @@ namespace PathOfExile3.Runtime.Controllers
 
         private void SetBuyButtonSettings(BaseSkillConfig skill, int cost)
         {
-            var canBeBought = _systemWallet.IsEnough(cost);
+            var canBeBought = _skillWallet.IsEnough(cost);
             var canBeActivated = _skillSystem.CanToActivateSkill(skill);
 
             _skillPanelView.BuyButton.interactable = canBeBought && canBeActivated;
@@ -108,6 +143,25 @@ namespace PathOfExile3.Runtime.Controllers
             var canDeactivate = _skillSystem.CanToDeactivateSkill(skill);
 
             _skillPanelView.ResetButton.interactable = canDeactivate;
+        }
+
+        private void IncreaseBalance()
+        {
+            _skillWallet.Put(1);
+        }
+
+        private void OnSkillSettingChanged(BaseSkillConfig skillConfig, bool isActivated)
+        {
+            var button = _skillButtonDictionary[skillConfig];
+            
+            if (isActivated)
+            {
+                button.ActivateSkillStateVisualization();
+            }
+            else
+            {
+                button.DeactivateSkillStateVisualization();
+            }
         }
     }
 }

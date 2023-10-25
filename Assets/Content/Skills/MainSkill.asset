@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15635a3880de20a46a639339891a4a8a, type: 3}
   m_Name: MainSkill
   m_EditorClassIdentifier: 
-  _skillKey: Base Skill
+  skillName: Main Skill
   _cost: 0
+  _description: Nothing to do
   _headerSkills: []
   _childSkills:
   - {fileID: 11400000, guid: ecbca0eead305c649a741f216358a17d, type: 2}
+  isPersistent: 1

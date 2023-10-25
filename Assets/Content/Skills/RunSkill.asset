@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15635a3880de20a46a639339891a4a8a, type: 3}
   m_Name: RunSkill
   m_EditorClassIdentifier: 
-  _skillKey: 
-  _cost: 0
+  skillName: Run
+  _cost: 5
+  _description: 'Character can run '
   _headerSkills:
   - {fileID: 11400000, guid: ba9ccfa8b877a8a409b60c9af53f3196, type: 2}
   _childSkills: []
+  isPersistent: 0

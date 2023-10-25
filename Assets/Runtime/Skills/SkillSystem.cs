@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PathOfExile3.Runtime.Models;
 using PathOfExile3.Runtime.Skills.Configs;
 using PathOfExile3.Runtime.Skills.Points;
@@ -7,6 +8,8 @@ namespace PathOfExile3.Runtime.Skills
 {
     public class SkillSystem
     {
+        public event Action<BaseSkillConfig, bool> SkillStateChanged = delegate { };
+
         private readonly SkillConfig[] _skillConfigs;
         private readonly SkillSystemModel _skillSystemModel;
 
@@ -50,6 +53,8 @@ namespace PathOfExile3.Runtime.Skills
             var skill = _skillSystemModel.GetSkillPoint(skillConfig);
 
             skill.Activate();
+
+            SkillStateChanged.Invoke(skillConfig, true);
         }
 
         public void DeactivateSkill(BaseSkillConfig skillConfig)
@@ -57,6 +62,8 @@ namespace PathOfExile3.Runtime.Skills
             var skill = _skillSystemModel.GetSkillPoint(skillConfig);
 
             skill.Deactivate();
+
+            SkillStateChanged.Invoke(skillConfig, false);
         }
     }
 }
