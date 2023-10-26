@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using UnityEngine.Serialization;
+using System.Collections.Generic;
 
-namespace PathOfExile3.Runtime.Skills.Configs
+using UnityEngine;
+
+namespace PathOfExile3.Runtime.Skills
 {
     [CreateAssetMenu(menuName = "Skill/Configs", fileName = "SkillConfig")]
     public class SkillConfig : BaseSkillConfig

@@ -1,6 +1,4 @@
-﻿using PathOfExile3.Runtime.Skills.Configs;
-
-namespace PathOfExile3.Runtime.Skills.Points
+﻿namespace PathOfExile3.Runtime.Skills
 {
     public class Skill
     {

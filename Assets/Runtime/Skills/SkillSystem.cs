@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using PathOfExile3.Runtime.Models;
-using PathOfExile3.Runtime.Skills.Configs;
-using PathOfExile3.Runtime.Skills.Points;
 
 namespace PathOfExile3.Runtime.Skills
 {
@@ -24,7 +23,7 @@ namespace PathOfExile3.Runtime.Skills
         {
             var skillPointsDictionary = new Dictionary<BaseSkillConfig, Skill>();
 
-            for (int i = 0; i < _skillConfigs.Length; i++)
+            for (var i = 0; i < _skillConfigs.Length; i++)
             {
                 var config = _skillConfigs[i];
                 var skillPoint = new Skill(config);

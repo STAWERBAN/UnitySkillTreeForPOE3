@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+
+using PathOfExile3.Runtime.View;
 using PathOfExile3.Runtime.Models;
 using PathOfExile3.Runtime.Skills;
-using PathOfExile3.Runtime.Skills.Configs;
-using PathOfExile3.Runtime.View;
 
 namespace PathOfExile3.Runtime.Controllers
 {
@@ -72,6 +72,7 @@ namespace PathOfExile3.Runtime.Controllers
             _skillSystemView.ResetAllTreeButton.onClick.RemoveListener(_skillSystem.ResetAll);
 
             _skillWallet.BalanceChanged -= OnBalanceChanged;
+            _skillSystem.SkillStateChanged -= OnSkillSettingChanged;
         }
 
         private void ChangeShowSkillTreeState()

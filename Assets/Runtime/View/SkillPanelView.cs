@@ -1,7 +1,8 @@
 ﻿using TMPro;
+
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.Serialization;
 
 namespace PathOfExile3.Runtime.View
 {

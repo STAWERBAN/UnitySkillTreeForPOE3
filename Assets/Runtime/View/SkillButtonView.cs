@@ -1,8 +1,9 @@
 ﻿using System;
-using PathOfExile3.Runtime.Skills.Configs;
-using PathOfExile3.Runtime.Skills.Points;
+
 using UnityEngine;
 using UnityEngine.UI;
+
+using PathOfExile3.Runtime.Skills;
 
 namespace PathOfExile3.Runtime.View
 {

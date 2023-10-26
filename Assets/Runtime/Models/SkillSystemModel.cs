@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using PathOfExile3.Runtime.Skills.Configs;
-using PathOfExile3.Runtime.Skills.Points;
+using System.Collections.Generic;
+using PathOfExile3.Runtime.Skills;
 
 namespace PathOfExile3.Runtime.Models
 {
