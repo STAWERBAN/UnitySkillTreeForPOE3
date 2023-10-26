@@ -16,19 +16,29 @@ namespace PathOfExile3.Runtime.Skills.Points
             _isActive = skillConfig.IsPersistent;
         }
 
-        public void Activate()
-        {
-            _isActive = true;
-        }
-
         public bool IsPersistent()
         {
             return _skillConfig.IsPersistent;
         }
 
-        public void Deactivate()
+        public bool TryActivate()
         {
+            if (_isActive)
+                return false;
+
+            _isActive = true;
+
+            return true;
+        }
+
+        public bool TryDeactivate()
+        {
+            if (!_isActive || IsPersistent())
+                return false;
+
             _isActive = false;
+
+            return true;
         }
 
         public int GetCost()
@@ -46,14 +56,9 @@ namespace PathOfExile3.Runtime.Skills.Points
             return _skillConfig.SkillName;
         }
 
-        public BaseSkillConfig[] GetHeaderSkill()
+        public BaseSkillConfig[] GetNearestSkill()
         {
-            return _skillConfig.HeaderSkills;
-        }
-
-        public BaseSkillConfig[] GetChildSkill()
-        {
-            return _skillConfig.ChildSkills;
+            return _skillConfig.NearestSkills;
         }
     }
 }

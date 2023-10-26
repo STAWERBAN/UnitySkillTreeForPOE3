@@ -10,80 +10,49 @@ namespace PathOfExile3.Runtime.Skills.Configs
     {
         [SerializeField] private int _cost;
         [SerializeField] private string _description;
-        [SerializeField] private List<BaseSkillConfig> _headerSkills;
-        [SerializeField] private List<BaseSkillConfig> _childSkills;
-        [FormerlySerializedAs("_isPersistant")] [SerializeField] private bool isPersistent;
+        [SerializeField] private List<BaseSkillConfig> _nearestSkills = new();
+        [SerializeField] private bool isPersistent;
 
         public int Cost => _cost;
         public string Description => _description;
-        public BaseSkillConfig[] ChildSkills => _childSkills.ToArray();
-        public BaseSkillConfig[] HeaderSkills => _headerSkills.ToArray();
+        public BaseSkillConfig[] NearestSkills => _nearestSkills.ToArray();
         public bool IsPersistent => isPersistent;
 
         #region EditorTools
 
 #if UNITY_EDITOR
 
-        private BaseSkillConfig[] _headerSkillsCached;
-        private BaseSkillConfig[] _childSkillsCached;
+        private BaseSkillConfig[] _nearestSkillsCashed = { };
 
         public void OnValidate()
         {
-            var removedChild = _childSkillsCached.Except(_childSkills);
-            var addedChild = _childSkills.Except(_childSkillsCached);
-
-            var removedParent = _headerSkillsCached.Except(_headerSkills);
-            var addedParent = _headerSkills.Except(_headerSkillsCached);
-
-            foreach (var skillConfig in removedChild)
-            {
-                ((SkillConfig)skillConfig).RemoveFromParent(this);
-            }
-
-            foreach (var skillConfig in addedChild)
-            {
-                ((SkillConfig)skillConfig).AddToParent(this);
-            }
+            var removedParent = _nearestSkillsCashed.Except(_nearestSkills);
+            var addedParent = _nearestSkills.Except(_nearestSkillsCashed);
 
             foreach (var skillConfig in removedParent)
             {
-                ((SkillConfig)skillConfig).RemoveFromChild(this);
+                ((SkillConfig)skillConfig).RemoveNearestSkill(this);
             }
 
             foreach (var skillConfig in addedParent)
             {
-                ((SkillConfig)skillConfig).AddToChild(this);
+                ((SkillConfig)skillConfig).AddNearestSkill(this);
             }
 
-            _headerSkillsCached = _headerSkills.ToArray();
-            _childSkillsCached = _childSkills.ToArray();
+            _nearestSkillsCashed = NearestSkills;
         }
 
-        public void AddToChild(BaseSkillConfig baseSkillConfig)
+        public void AddNearestSkill(BaseSkillConfig baseSkillConfig)
         {
-            if (!_childSkills.Contains(baseSkillConfig))
-                _childSkills.Add(baseSkillConfig);
+            if (!_nearestSkills.Contains(baseSkillConfig))
+                _nearestSkills.Add(baseSkillConfig);
             else
                 Debug.LogWarning($"{baseSkillConfig.SkillName} is already added");
         }
 
-        public void RemoveFromChild(BaseSkillConfig baseSkillConfig)
+        public void RemoveNearestSkill(BaseSkillConfig baseSkillConfig)
         {
-            if (!_childSkills.Remove(baseSkillConfig))
-                Debug.Log("Something went wrong");
-        }
-
-        public void AddToParent(BaseSkillConfig baseSkillConfig)
-        {
-            if (!_headerSkills.Contains(baseSkillConfig))
-                _headerSkills.Add(baseSkillConfig);
-            else
-                Debug.LogWarning($"{baseSkillConfig.SkillName} is already added");
-        }
-
-        public void RemoveFromParent(BaseSkillConfig baseSkillConfig)
-        {
-            if (!_headerSkills.Remove(baseSkillConfig))
+            if (!_nearestSkills.Remove(baseSkillConfig))
                 Debug.Log("Something went wrong");
         }
 #endif

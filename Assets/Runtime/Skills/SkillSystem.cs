@@ -13,6 +13,7 @@ namespace PathOfExile3.Runtime.Skills
         private readonly SkillConfig[] _skillConfigs;
         private readonly SkillSystemModel _skillSystemModel;
 
+
         public SkillSystem(SkillConfig[] skillConfigs)
         {
             _skillConfigs = skillConfigs;
@@ -23,11 +24,12 @@ namespace PathOfExile3.Runtime.Skills
         {
             var skillPointsDictionary = new Dictionary<BaseSkillConfig, Skill>();
 
-            foreach (var skillConfig in _skillConfigs)
+            for (int i = 0; i < _skillConfigs.Length; i++)
             {
-                var skillPoint = new Skill(skillConfig);
+                var config = _skillConfigs[i];
+                var skillPoint = new Skill(config);
 
-                skillPointsDictionary.Add(skillConfig, skillPoint);
+                skillPointsDictionary.Add(config, skillPoint);
             }
 
             _skillSystemModel.SetSkillDictionary(skillPointsDictionary);
@@ -52,7 +54,7 @@ namespace PathOfExile3.Runtime.Skills
         {
             var skill = _skillSystemModel.GetSkillPoint(skillConfig);
 
-            skill.Activate();
+            if (!skill.TryActivate()) return;
 
             SkillStateChanged.Invoke(skillConfig, true);
         }
@@ -61,9 +63,17 @@ namespace PathOfExile3.Runtime.Skills
         {
             var skill = _skillSystemModel.GetSkillPoint(skillConfig);
 
-            skill.Deactivate();
+            if (!skill.TryDeactivate()) return;
 
             SkillStateChanged.Invoke(skillConfig, false);
+        }
+
+        public void ResetAll()
+        {
+            foreach (var skillConfig in _skillConfigs)
+            {
+                DeactivateSkill(skillConfig);
+            }
         }
     }
 }

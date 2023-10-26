@@ -6,18 +6,16 @@ namespace PathOfExile3.Runtime.Models
     {
         public event Action<int> BalanceChanged = delegate { };
 
-        private int _balance;
-
-        public int Balance => _balance;
+        public int Balance { get; private set; }
 
         public SkillWallet(int balance)
         {
-            _balance = balance;
+            Balance = balance;
         }
 
         public bool IsEnough(int cost)
         {
-            return _balance > cost;
+            return Balance >= cost;
         }
 
         public void Withdraw(int amount)
@@ -27,14 +25,14 @@ namespace PathOfExile3.Runtime.Models
                 throw new ArgumentException("Amount can not be negative", nameof(amount));
             }
 
-            if (_balance < amount)
+            if (Balance < amount)
             {
                 throw new ArgumentException("Not enough balance", nameof(amount));
             }
 
-            _balance -= amount;
+            Balance -= amount;
 
-            BalanceChanged.Invoke(_balance);
+            BalanceChanged.Invoke(Balance);
         }
 
         public void Put(int amount)
@@ -44,9 +42,9 @@ namespace PathOfExile3.Runtime.Models
                 throw new ArgumentException("Amount can not be negative", nameof(amount));
             }
 
-            _balance += amount;
+            Balance += amount;
 
-            BalanceChanged.Invoke(_balance);
+            BalanceChanged.Invoke(Balance);
         }
     }
 }

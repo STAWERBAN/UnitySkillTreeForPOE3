@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15635a3880de20a46a639339891a4a8a, type: 3}
-  m_Name: MainSkill
+  m_Name: Sit
   m_EditorClassIdentifier: 
-  skillName: Main Skill
-  _cost: 0
-  _description: Nothing to do
-  _headerSkills: []
-  _childSkills:
-  - {fileID: 11400000, guid: ecbca0eead305c649a741f216358a17d, type: 2}
-  isPersistent: 1
+  skillName: Sit
+  _cost: 3
+  _description: You can sit anywhere
+  _nearestSkills:
+  - {fileID: 11400000, guid: 4ab3ca7d53e12fd49824c66a5c758a69, type: 2}
+  - {fileID: 11400000, guid: 90f4b985185941e43b4e68da34fe124a, type: 2}
+  isPersistent: 0

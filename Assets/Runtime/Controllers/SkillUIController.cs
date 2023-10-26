@@ -31,7 +31,7 @@ namespace PathOfExile3.Runtime.Controllers
             foreach (var skillButtonView in _skillSystemView.SkillButtonViews)
             {
                 skillButtonView.OnButtonClick += HandleSkillButtonClick;
-                
+
                 _skillButtonDictionary.Add(skillButtonView.SkillConfig, skillButtonView);
 
                 if (_skillSystem.GetSkill(skillButtonView.SkillConfig).IsActive)
@@ -49,6 +49,7 @@ namespace PathOfExile3.Runtime.Controllers
             _skillPanelView.CloseButton.onClick.AddListener(CloseSkillDescriptionPanel);
             _skillSystemView.ShowSkillTreeButton.onClick.AddListener(ChangeShowSkillTreeState);
             _skillSystemView.AddSkillPointButton.onClick.AddListener(IncreaseBalance);
+            _skillSystemView.ResetAllTreeButton.onClick.AddListener(_skillSystem.ResetAll);
 
             _skillWallet.BalanceChanged += OnBalanceChanged;
             _skillSystem.SkillStateChanged += OnSkillSettingChanged;
@@ -68,6 +69,7 @@ namespace PathOfExile3.Runtime.Controllers
             _skillPanelView.CloseButton.onClick.RemoveListener(CloseSkillDescriptionPanel);
             _skillSystemView.ShowSkillTreeButton.onClick.RemoveListener(ChangeShowSkillTreeState);
             _skillSystemView.AddSkillPointButton.onClick.RemoveListener(IncreaseBalance);
+            _skillSystemView.ResetAllTreeButton.onClick.RemoveListener(_skillSystem.ResetAll);
 
             _skillWallet.BalanceChanged -= OnBalanceChanged;
         }
@@ -86,18 +88,32 @@ namespace PathOfExile3.Runtime.Controllers
 
         private void HandleBuyButtonClick()
         {
-            _skillWallet.Withdraw(_skillSystem.GetSkill(_currentSkillConfig).GetCost());
-            _skillSystem.ActivateSkill(_currentSkillConfig);
+            try
+            {
+                _skillSystem.ActivateSkill(_currentSkillConfig);
 
-            CloseSkillDescriptionPanel();
+                CloseSkillDescriptionPanel();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private void HandleResetClick()
         {
-            _skillWallet.Put(_skillSystem.GetSkill(_currentSkillConfig).GetCost());
-            _skillSystem.DeactivateSkill(_currentSkillConfig);
+            try
+            {
+                _skillSystem.DeactivateSkill(_currentSkillConfig);
 
-            CloseSkillDescriptionPanel();
+                CloseSkillDescriptionPanel();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private void CloseSkillDescriptionPanel()
@@ -147,13 +163,21 @@ namespace PathOfExile3.Runtime.Controllers
 
         private void IncreaseBalance()
         {
-            _skillWallet.Put(1);
+            try
+            {
+                _skillWallet.Put(1);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private void OnSkillSettingChanged(BaseSkillConfig skillConfig, bool isActivated)
         {
             var button = _skillButtonDictionary[skillConfig];
-            
+
             if (isActivated)
             {
                 button.ActivateSkillStateVisualization();

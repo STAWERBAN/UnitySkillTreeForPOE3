@@ -1,4 +1,5 @@
-﻿using PathOfExile3.Runtime.Controllers;
+﻿using System;
+using PathOfExile3.Runtime.Controllers;
 using PathOfExile3.Runtime.Models;
 using PathOfExile3.Runtime.Skills;
 using PathOfExile3.Runtime.Skills.Configs;
@@ -16,16 +17,19 @@ namespace PathOfExile3.Runtime
         private SkillSystem _skillSystem;
         private SkillUIController _skillUIController;
         private SkillWallet _skillWallet;
+        private SkillWalletController _skillWalletController;
 
         private void Awake()
         {
-            _skillWallet = new SkillWallet(10);
+            _skillWallet = new SkillWallet(0);
 
             _skillSystem = new SkillSystem(_skillConfigs);
             _skillUIController = new SkillUIController(_skillSystemView, _skillSystem, _skillPanelView, _skillWallet);
+            _skillWalletController = new SkillWalletController(_skillSystem, _skillWallet);
 
             _skillSystem.Init();
             _skillUIController.Init();
+            _skillWalletController.Init();
         }
     }
 }

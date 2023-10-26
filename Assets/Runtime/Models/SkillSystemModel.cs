@@ -10,6 +10,8 @@ namespace PathOfExile3.Runtime.Models
     {
         private Dictionary<BaseSkillConfig, Skill> _skillPointsDictionary = new();
 
+        private List<Skill> _cashedCheckedList = new();
+
         public void SetSkillDictionary(Dictionary<BaseSkillConfig, Skill> dictionary)
         {
             _skillPointsDictionary = dictionary;
@@ -36,15 +38,63 @@ namespace PathOfExile3.Runtime.Models
         public bool CanToActivateSkill(BaseSkillConfig skillConfig)
         {
             var skill = GetSkillPoint(skillConfig);
-            var headerSkill = skill.GetHeaderSkill();
-            return headerSkill.Any(IsSkillActive);
+            var headerSkills = skill.GetNearestSkill();
+            return headerSkills.Any(IsSkillActive);
         }
 
         public bool CanToDeactivateSkill(BaseSkillConfig skillConfig)
         {
             var skill = GetSkillPoint(skillConfig);
-            var childSkills = skill.GetChildSkill();
-            return !skill.IsPersistent() && (childSkills.Any(IsSkillActive) || childSkills.Length == 0);
+
+            _cashedCheckedList.Clear();
+
+            if (skill.IsPersistent())
+                return false;
+
+            var childConfigs = skill.GetNearestSkill();
+
+            foreach (var childConfig in childConfigs)
+            {
+                var childSkill = GetSkillPoint(childConfig);
+
+                _cashedCheckedList.Clear();
+                _cashedCheckedList.Add(skill);
+
+                if (!childSkill.IsActive)
+                    continue;
+
+                if (!InConnectedWithHead(childSkill))
+                    return false;
+            }
+
+
+            return true;
+        }
+
+        private bool InConnectedWithHead(Skill checkedSkill)
+        {
+            if (checkedSkill.IsPersistent())
+                return true;
+
+            var childSkillConfigs = checkedSkill.GetNearestSkill();
+
+            foreach (var childSkillConfig in childSkillConfigs)
+            {
+                var childSkill = GetSkillPoint(childSkillConfig);
+
+                if (_cashedCheckedList.Contains(childSkill))
+                    continue;
+
+                _cashedCheckedList.Add(childSkill);
+
+                if (!childSkill.IsActive)
+                    continue;
+
+                if (InConnectedWithHead(childSkill))
+                    return true;
+            }
+
+            return false;
         }
 
         private Skill GetSkillFromDictionary(BaseSkillConfig skillConfig)
