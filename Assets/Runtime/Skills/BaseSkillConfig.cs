@@ -4,8 +4,8 @@ namespace PathOfExile3.Runtime.Skills
 {
     public abstract class BaseSkillConfig : ScriptableObject
     {
-        [SerializeField] private string skillName;
+        [SerializeField] private string _skillName;
 
-        public string SkillName => skillName;
+        public string SkillName => _skillName;
     }
 }

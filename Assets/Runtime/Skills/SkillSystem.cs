@@ -7,11 +7,10 @@ namespace PathOfExile3.Runtime.Skills
 {
     public class SkillSystem
     {
-        public event Action<BaseSkillConfig, bool> SkillStateChanged = delegate { };
-
         private readonly SkillConfig[] _skillConfigs;
         private readonly SkillSystemModel _skillSystemModel;
 
+        public event Action<BaseSkillConfig, bool> SkillStateChanged = delegate { };
 
         public SkillSystem(SkillConfig[] skillConfigs)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 using PathOfExile3.Runtime.Skills;
 
 namespace PathOfExile3.Runtime.Models
@@ -9,7 +10,7 @@ namespace PathOfExile3.Runtime.Models
     {
         private Dictionary<BaseSkillConfig, Skill> _skillPointsDictionary = new();
 
-        private List<Skill> _cashedCheckedList = new();
+        private readonly List<Skill> _cashedCheckedList = new();
 
         public void SetSkillDictionary(Dictionary<BaseSkillConfig, Skill> dictionary)
         {
@@ -24,7 +25,7 @@ namespace PathOfExile3.Runtime.Models
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.LogError(e);
                 throw;
             }
         }
@@ -65,7 +66,6 @@ namespace PathOfExile3.Runtime.Models
                 if (!InConnectedWithHead(childSkill))
                     return false;
             }
-
 
             return true;
         }

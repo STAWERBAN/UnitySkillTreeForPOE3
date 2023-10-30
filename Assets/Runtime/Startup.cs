@@ -30,5 +30,11 @@ namespace PathOfExile3.Runtime
             _skillUIController.Init();
             _skillWalletController.Init();
         }
+
+        private void OnDestroy()
+        {
+            _skillUIController.Dispose();
+            _skillWalletController.Dispose();
+        }
     }
 }

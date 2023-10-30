@@ -6,7 +6,18 @@ namespace PathOfExile3.Runtime.Models
     {
         public event Action<int> BalanceChanged = delegate { };
 
-        public int Balance { get; private set; }
+        private int _balance;
+
+        public int Balance
+        {
+            get => _balance;
+            private set
+            {
+                _balance = value;
+
+                BalanceChanged.Invoke(Balance);
+            }
+        }
 
         public SkillWallet(int balance)
         {
@@ -31,8 +42,6 @@ namespace PathOfExile3.Runtime.Models
             }
 
             Balance -= amount;
-
-            BalanceChanged.Invoke(Balance);
         }
 
         public void Put(int amount)
@@ -43,8 +52,6 @@ namespace PathOfExile3.Runtime.Models
             }
 
             Balance += amount;
-
-            BalanceChanged.Invoke(Balance);
         }
     }
 }

@@ -524,7 +524,7 @@ MonoBehaviour:
   _headerText: {fileID: 1302578912}
   _descriptionText: {fileID: 1256710672}
   _costText: {fileID: 477858902}
-  closeButton: {fileID: 624860798}
+  _closeButton: {fileID: 624860798}
   _buyButton: {fileID: 1565439048}
   _resetButton: {fileID: 2138384356}
 --- !u!114 &66737851

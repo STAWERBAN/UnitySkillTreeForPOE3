@@ -1,12 +1,14 @@
-﻿using PathOfExile3.Runtime.Models;
+﻿using System;
+
+using PathOfExile3.Runtime.Models;
 using PathOfExile3.Runtime.Skills;
 
 namespace PathOfExile3.Runtime.Controllers
 {
-    public class SkillWalletController
+    public class SkillWalletController : IDisposable
     {
-        private SkillSystem _skillSystem;
-        private SkillWallet _wallet;
+        private readonly SkillSystem _skillSystem;
+        private readonly SkillWallet _wallet;
 
         public SkillWalletController(SkillSystem skillSystem, SkillWallet wallet)
         {
@@ -17,6 +19,11 @@ namespace PathOfExile3.Runtime.Controllers
         public void Init()
         {
             _skillSystem.SkillStateChanged += HandleSkillChangeState;
+        }
+
+        public void Dispose()
+        {
+            _skillSystem.SkillStateChanged -= HandleSkillChangeState;
         }
 
         private void HandleSkillChangeState(BaseSkillConfig skillConfig, bool isActivated)

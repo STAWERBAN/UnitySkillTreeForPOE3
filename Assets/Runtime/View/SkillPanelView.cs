@@ -2,7 +2,6 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Serialization;
 
 namespace PathOfExile3.Runtime.View
 {
@@ -11,14 +10,14 @@ namespace PathOfExile3.Runtime.View
         [SerializeField] private TMP_Text _headerText;
         [SerializeField] private TMP_Text _descriptionText;
         [SerializeField] private TMP_Text _costText;
-        [FormerlySerializedAs("_exitButton")] [SerializeField] private Button closeButton;
+        [SerializeField] private Button _closeButton;
         [SerializeField] private Button _buyButton;
         [SerializeField] private Button _resetButton;
 
         public TMP_Text HeaderText => _headerText;
         public TMP_Text DescriptionText => _descriptionText;
         public TMP_Text CostText => _costText;
-        public Button CloseButton => closeButton;
+        public Button CloseButton => _closeButton;
         public Button BuyButton => _buyButton;
         public Button ResetButton => _resetButton;
     }

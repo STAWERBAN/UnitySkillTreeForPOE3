@@ -5,17 +5,19 @@ using PathOfExile3.Runtime.View;
 using PathOfExile3.Runtime.Models;
 using PathOfExile3.Runtime.Skills;
 
+using UnityEngine;
+
 namespace PathOfExile3.Runtime.Controllers
 {
     public class SkillUIController : IDisposable
     {
-        private SkillSystemView _skillSystemView;
-        private SkillSystem _skillSystem;
-        private SkillPanelView _skillPanelView;
-        private SkillWallet _skillWallet;
+        private readonly SkillSystemView _skillSystemView;
+        private readonly SkillSystem _skillSystem;
+        private readonly SkillPanelView _skillPanelView;
+        private readonly SkillWallet _skillWallet;
 
         private BaseSkillConfig _currentSkillConfig;
-        private Dictionary<BaseSkillConfig, ISkillButton> _skillButtonDictionary = new();
+        private readonly Dictionary<BaseSkillConfig, ISkillButton> _skillButtonDictionary = new();
 
         public SkillUIController(SkillSystemView skillSystemView,
             SkillSystem skillSystem, SkillPanelView skillPanelView, SkillWallet skillWallet)
@@ -97,7 +99,7 @@ namespace PathOfExile3.Runtime.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.LogError(e);
                 throw;
             }
         }
@@ -112,7 +114,7 @@ namespace PathOfExile3.Runtime.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.LogError(e);
                 throw;
             }
         }
@@ -170,7 +172,7 @@ namespace PathOfExile3.Runtime.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.LogError(e);
                 throw;
             }
         }
