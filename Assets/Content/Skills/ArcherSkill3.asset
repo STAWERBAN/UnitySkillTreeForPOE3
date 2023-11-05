@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929d0429968f4c7d9522deea14911298, type: 3}
+  m_Name: ArcherSkill3
+  m_EditorClassIdentifier: 
+  _identifier: 
+  _name: Bow
+  _price: 3
+  _description: Increase bow damage 25%
+  _adjacentSkillData:
+  - {fileID: 11400000, guid: 27da2fb5968c7934fab0db4b99fd7c04, type: 2}
+  - {fileID: 11400000, guid: 0cf6247f404799c4f8914989324ad3ab, type: 2}
+  - {fileID: 11400000, guid: 8dbdfdcd919bf1e4cb90f7157799c2c0, type: 2}
+  _persistent: 0

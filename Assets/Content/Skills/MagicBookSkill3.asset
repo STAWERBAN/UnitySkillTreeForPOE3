@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929d0429968f4c7d9522deea14911298, type: 3}
+  m_Name: MagicBookSkill3
+  m_EditorClassIdentifier: 
+  _identifier: 
+  _name: 'More Magic Damage '
+  _price: 3
+  _description: Increase magic damage 20%
+  _adjacentSkillData:
+  - {fileID: 11400000, guid: 509a657411e360946b2a4197f9b14f37, type: 2}
+  - {fileID: 11400000, guid: 7b803f2ffd0e8a548b3568b27af1b788, type: 2}
+  _persistent: 1

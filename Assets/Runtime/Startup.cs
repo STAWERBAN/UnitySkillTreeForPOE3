@@ -1,40 +1,61 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using SkillGraph.Controllers;
+using SkillGraph.Models;
+using SkillGraph.Screens.Services;
+using SkillGraph.SkillSystem.Modules;
+using SkillGraph.Systems;
+using SkillGraph.Views;
+using UnityEngine;
 
-using PathOfExile3.Runtime.View;
-using PathOfExile3.Runtime.Skills;
-using PathOfExile3.Runtime.Models;
-using PathOfExile3.Runtime.Controllers;
-
-namespace PathOfExile3.Runtime
+namespace SkillGraph
 {
     public class Startup : MonoBehaviour
     {
-        [SerializeField] private SkillConfig[] _skillConfigs;
-        [SerializeField] private SkillSystemView _skillSystemView;
-        [SerializeField] private SkillPanelView _skillPanelView;
+        [SerializeField] private SkillDataContainer[] _skillDataContainer;
+        [SerializeField] private SkillGraphView _skillGraph;
+        [SerializeField] private SkillScreenView _skillScreen;
+        [SerializeField] private SceneDataContainer _sceneDataContainer;
+        [SerializeField] private CloseScreenProxy _closeScreenProxy;
 
-        private SkillSystem _skillSystem;
-        private SkillUIController _skillUIController;
-        private SkillWallet _skillWallet;
-        private SkillWalletController _skillWalletController;
+        private IScreenService _screenService;
+
+        private IInstallable[] _installers;
+        private IDisposable[] _disposables;
 
         private void Awake()
         {
-            _skillWallet = new SkillWallet(0);
+            _screenService = new ScreenService();
 
-            _skillSystem = new SkillSystem(_skillConfigs);
-            _skillUIController = new SkillUIController(_skillSystemView, _skillSystem, _skillPanelView, _skillWallet);
-            _skillWalletController = new SkillWalletController(_skillSystem, _skillWallet);
+            _closeScreenProxy.SetScreenService(_screenService);
 
-            _skillSystem.Init();
-            _skillUIController.Init();
-            _skillWalletController.Init();
+            var skillPointWallet = new Wallet();
+
+            var skillModule = new SkillModule(_skillDataContainer);
+
+            var widgets = _skillDataContainer.Select(container => container.GetWidget()).ToArray();
+
+            var skillController = new SkillGraphController(_screenService, skillModule,
+                skillPointWallet, widgets, _skillGraph, _skillScreen, _sceneDataContainer);
+
+            _installers = new IInstallable[] { skillController };
+            _disposables = new IDisposable[] { skillController };
+        }
+
+        private void Start()
+        {
+            foreach (var installer in _installers)
+            {
+                installer.Install();
+            }
         }
 
         private void OnDestroy()
         {
-            _skillUIController.Dispose();
-            _skillWalletController.Dispose();
+            foreach (var disposable in _disposables)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }
