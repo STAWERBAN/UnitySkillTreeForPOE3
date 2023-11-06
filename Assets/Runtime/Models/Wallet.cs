@@ -3,7 +3,7 @@ using SkillGraph.SkillSystem.Exceptions;
 
 namespace SkillGraph.Models
 {
-    public class Wallet
+    public class Wallet : IDisposable
     {
         public event Action<int> BalanceChanged;
 
@@ -24,6 +24,11 @@ namespace SkillGraph.Models
         }
 
         private int _balance;
+
+        void IDisposable.Dispose()
+        {
+            BalanceChanged = null;
+        }
 
         public void Put(int amount = 1)
         {

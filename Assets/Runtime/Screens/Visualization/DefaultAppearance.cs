@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading;
-
 using Cysharp.Threading.Tasks;
-
 using UnityEngine;
 
 namespace SkillGraph.Screens.Visualization
@@ -10,8 +8,7 @@ namespace SkillGraph.Screens.Visualization
     [Serializable]
     public class DefaultAppearance : IScreenDisplayStrategy
     {
-        [SerializeField]
-        private GameObject _content;
+        [SerializeField] private GameObject _content;
 
         UniTask IScreenDisplayStrategy.ShowAsync(CancellationToken cancellationToken)
         {

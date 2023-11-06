@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 namespace SkillGraph.Views
 {
-    public class SkillWidgetView : MonoBehaviour, ISkillWidgetView, IPointerClickHandler
+    public class SkillWidgetView : MonoBehaviour, IDisposable, ISkillWidgetView, IPointerClickHandler
     {
         [SerializeField] private SpriteRenderer _icon;
         [SerializeField] private Color _activeStateColor = Color.green;
@@ -31,7 +31,13 @@ namespace SkillGraph.Views
         private bool _isSkillActive;
         private Tween _tween;
 
-        public void OnPointerClick(PointerEventData eventData)
+        public void Dispose()
+        {
+            Clicked = null;
+            ChangeVisualizeState = null;
+        }
+
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
             Clicked?.Invoke();
         }

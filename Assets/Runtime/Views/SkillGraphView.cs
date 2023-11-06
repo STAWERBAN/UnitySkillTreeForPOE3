@@ -10,7 +10,6 @@ namespace SkillGraph.Views
         public event Action Clear = delegate {  };
 
         [SerializeField] private Button _clearButton;
-        [SerializeField] private Button _closeButton;
         [SerializeField] private TextMeshProUGUI _skillPointBalance;
 
         private void Awake()

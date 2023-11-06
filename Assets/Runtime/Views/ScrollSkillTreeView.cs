@@ -11,7 +11,6 @@ namespace SkillGraph.Views
 
         private Vector2 _currentPosition;
 
-
         private void Update()
         {
             _content.transform.position = 

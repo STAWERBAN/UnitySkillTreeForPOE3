@@ -6,7 +6,8 @@ namespace SkillGraph.SkillSystem.Exceptions
     {
         private const string Message = "Cant to purchase overprice skill";
 
-        public OverdraftException() : base(Message)
+        public OverdraftException() 
+            : base(Message)
         {
         }
     }

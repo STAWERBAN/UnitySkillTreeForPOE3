@@ -16,18 +16,14 @@ namespace SkillGraph.Controllers
     public class SkillGraphController : IInstallable, IDisposable
     {
         private readonly IScreenService _screenService;
-
         private readonly SkillModule _skillModule;
-
         private readonly Wallet _skillPointsWallet;
         private readonly SkillWidgetView[] _widgets;
-
         private readonly SkillGraphView _skillGraph;
         private readonly SkillScreenView _skillScreenView;
-
         private readonly WarningScreenView _warningScreenView;
 
-        private List<Skill> _cashedSkillList = new();
+        private readonly List<Skill> _cashedSkillList = new();
 
         public SkillGraphController(IScreenService screenService, SkillModule skillModule, Wallet skillPointsWallet,
             SkillWidgetView[] widgets, SkillGraphView skillGraph, SkillScreenView skillScreenView,
@@ -66,17 +62,23 @@ namespace SkillGraph.Controllers
             _skillGraph.SetBalance(_skillPointsWallet.Balance);
 
             _skillGraph.Clear += ClearTree;
-            _skillPointsWallet.BalanceChanged += UpdateBalance;
-            _skillScreenView.PurchaseClicked += PurchaseSkill;
+
             _skillScreenView.ResetClicked += ResetSkill;
+            _skillScreenView.PurchaseClicked += PurchaseSkill;
+            _skillPointsWallet.BalanceChanged += UpdateBalance;
         }
 
         void IDisposable.Dispose()
         {
+            foreach (var widget in _widgets)
+            {
+                widget.Dispose();
+            }
+
             _skillGraph.Clear -= ClearTree;
-            _skillPointsWallet.BalanceChanged -= UpdateBalance;
-            _skillScreenView.PurchaseClicked -= PurchaseSkill;
             _skillScreenView.ResetClicked -= ResetSkill;
+            _skillScreenView.PurchaseClicked -= PurchaseSkill;
+            _skillPointsWallet.BalanceChanged -= UpdateBalance;
         }
 
         private void OpenSkillScreen(Skill skill)

@@ -18,7 +18,7 @@ namespace SkillGraph.SkillSystem.Models
 
         public bool Persistent { get; private set; }
 
-        internal readonly string _identifier;
+        private readonly string _identifier;
 
         internal Skill(string identifier)
         {

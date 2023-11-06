@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using SkillGraph.SkillSystem.Data;
 using SkillGraph.SkillSystem.Models;
@@ -8,7 +9,7 @@ using SkillGraph.SkillSystem.Views;
 
 namespace SkillGraph.SkillSystem.Modules
 {
-    public class SkillModule
+    public class SkillModule : IDisposable
     {
         private readonly SkillViewModel[] _skillViewModels;
 
@@ -17,7 +18,7 @@ namespace SkillGraph.SkillSystem.Modules
         public SkillModule(IEnumerable<ISkillDataContainer> skillViewModels)
         {
             var skillViewModelsArray = skillViewModels.ToArray();
-            
+
             _skillViewModels = skillViewModelsArray.Select(container =>
                     new SkillViewModel(Skill.Create(container.SkillData), container.Widget))
                 .ToArray();
@@ -28,7 +29,7 @@ namespace SkillGraph.SkillSystem.Modules
 
                 if (skill == null)
                     continue;
-                
+
                 var adjacentSkills = new Skill[skillData.AdjacentSkillData.Length];
 
                 for (var i = 0; i < skillData.AdjacentSkillData.Length; i++)
@@ -37,6 +38,14 @@ namespace SkillGraph.SkillSystem.Modules
                 }
 
                 skill.AdjacentSkills = adjacentSkills;
+            }
+        }
+
+        void IDisposable.Dispose()
+        {
+            foreach (var skillViewModel in _skillViewModels)
+            {
+                skillViewModel.Skill.Active.Dispose();
             }
         }
 

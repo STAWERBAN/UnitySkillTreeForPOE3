@@ -2,7 +2,7 @@
 
 namespace SkillGraph.SkillSystem.Utilities
 {
-    public class ObservableProperty<T>
+    public class ObservableProperty<T> : IDisposable
     {
         public T Value
         {
@@ -18,6 +18,11 @@ namespace SkillGraph.SkillSystem.Utilities
         private event Action<T> Changed;
 
         private T _value;
+
+        public void Dispose()
+        {
+            Changed = null;
+        }
 
         public static ObservableProperty<T> operator +(ObservableProperty<T> prop, Action<T> subscription)
         {

@@ -1,11 +1,8 @@
 ﻿#if UNITASK_DOTWEEN_SUPPORT
 using System;
 using System.Threading;
-
 using Cysharp.Threading.Tasks;
-
 using DG.Tweening;
-
 using UnityEngine;
 
 namespace SkillGraph.Screens.Visualization
@@ -13,14 +10,9 @@ namespace SkillGraph.Screens.Visualization
     [Serializable]
     public class FadedAppearance : IScreenDisplayStrategy
     {
-        [SerializeField]
-        private GameObject _content;
-
-        [SerializeField]
-        private CanvasGroup _canvasGroup;
-
-        [SerializeField]
-        private float _appearanceDuration = 0.5f;
+        [SerializeField] private GameObject _content;
+        [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField] private float _appearanceDuration = 0.5f;
 
         void IScreenDisplayStrategy.Validate(GameObject root)
         {

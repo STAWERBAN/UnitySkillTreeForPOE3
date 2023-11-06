@@ -9,15 +9,14 @@ namespace SkillGraph.Views
 {
     public class SkillScreenView : ScreenViewBase
     {
-        public event Action ResetClicked;
-        public event Action PurchaseClicked;
-
         [SerializeField] private TextMeshProUGUI _title;
         [SerializeField] private TextMeshProUGUI _description;
         [SerializeField] private TextMeshProUGUI _price;
         [SerializeField] private Button _purchaseButton;
         [SerializeField] private Button _resetButton;
 
+        public event Action ResetClicked;
+        public event Action PurchaseClicked;
 
         private void Awake()
         {

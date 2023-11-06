@@ -1,11 +1,8 @@
 ﻿#if UNITASK_DOTWEEN_SUPPORT
 using System;
 using System.Threading;
-
 using Cysharp.Threading.Tasks;
-
 using DG.Tweening;
-
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,23 +11,12 @@ namespace SkillGraph.Screens.Visualization
     [Serializable]
     public class BounceAppearance : IScreenDisplayStrategy
     {
-        [SerializeField]
-        private GameObject _content;
-
-        [SerializeField]
-        private Image _fadeLayout;
-
-        [SerializeField]
-        private Transform _target;
-
-        [SerializeField]
-        private Vector3[] _appearValues;
-
-        [SerializeField]
-        private Vector3[] _disappearValues;
-
-        [SerializeField]
-        private float _appearanceDuration = 0.5f;
+        [SerializeField] private GameObject _content;
+        [SerializeField] private Image _fadeLayout;
+        [SerializeField] private Transform _target;
+        [SerializeField] private Vector3[] _appearValues;
+        [SerializeField] private Vector3[] _disappearValues;
+        [SerializeField] private float _appearanceDuration = 0.5f;
 
         void Validate(GameObject root)
         {

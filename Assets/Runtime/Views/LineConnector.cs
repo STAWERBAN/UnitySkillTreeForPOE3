@@ -16,8 +16,6 @@ namespace SkillGraph.Views
         private void OnValidate()
         {
             _lineRenderer ??= GetComponent<LineRenderer>();
-            _linkedWidgetView = _target.GetComponent<SkillWidgetView>();
-            _parentSkillView = transform.parent.GetComponent<SkillWidgetView>();
         }
 
         private void Awake()

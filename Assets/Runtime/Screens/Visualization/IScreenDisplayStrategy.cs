@@ -16,8 +16,6 @@ namespace SkillGraph.Screens.Visualization
 
         void Hide();
 
-        void Validate(GameObject root)
-        {
-        }
+        void Validate(GameObject root) { }
     }
 }
