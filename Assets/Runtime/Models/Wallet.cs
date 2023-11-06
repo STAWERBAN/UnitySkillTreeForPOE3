@@ -1,6 +1,5 @@
 ﻿using System;
 using SkillGraph.SkillSystem.Exceptions;
-using SkillGraph.SkillSystem.Utilities;
 
 namespace SkillGraph.Models
 {
@@ -26,7 +25,7 @@ namespace SkillGraph.Models
 
         private int _balance;
 
-        public void Put(int amount)
+        public void Put(int amount = 1)
         {
             Balance += amount;
         }

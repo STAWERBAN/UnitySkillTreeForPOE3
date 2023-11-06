@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929d0429968f4c7d9522deea14911298, type: 3}
   m_Name: MagicBookSkill2
   m_EditorClassIdentifier: 
-  _identifier: 
-  _name: 'More Magic Damage '
+  _identifier: 10efca94-fce6-4226-b075-d72f28bec24b
+  _name: More Magic Damage 2
   _price: 2
   _description: Increase magic damage 15%
   _adjacentSkillData:
   - {fileID: 11400000, guid: ffcbde3c624aa334da256d9e37871e2d, type: 2}
   - {fileID: 11400000, guid: 433af2d7f8d69bd48bef57ad17b36c16, type: 2}
-  _persistent: 1
+  _persistent: 0

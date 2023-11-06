@@ -9,24 +9,21 @@ namespace SkillGraph.SkillSystem.Data
     [CreateAssetMenu(menuName = "Skill/Configs", fileName = "SkillConfig")]
     public class SkillData : ScriptableObject
     {
-        public string Identifier => _identifier;
-
-        internal string Name => _name;
-
-        internal int Price => _price;
-
-        internal string Description => _description;
-
-        internal SkillData[] AdjacentSkillData => _adjacentSkillData.ToArray();
-
-        internal bool Persistent => _persistent;
-
         [SerializeField, HideInInspector] private string _identifier;
         [SerializeField] private string _name;
         [SerializeField] private int _price;
         [SerializeField] private string _description;
         [SerializeField] private List<SkillData> _adjacentSkillData;
         [SerializeField] private bool _persistent;
+        
+        public string Identifier => _identifier;
+
+        internal string Name => _name;
+        internal int Price => _price;
+        internal string Description => _description;
+        internal SkillData[] AdjacentSkillData => _adjacentSkillData.ToArray();
+        internal bool Persistent => _persistent;
+
 
 #if UNITY_EDITOR
         private SkillData[] _adjacentSkillsCache = Array.Empty<SkillData>();
@@ -37,7 +34,7 @@ namespace SkillGraph.SkillSystem.Data
         {
             _adjacentSkillData ??= new List<SkillData>();
 
-            _identifier ??= Guid.NewGuid().ToString();
+            _identifier = _identifier == string.Empty ? Guid.NewGuid().ToString() : _identifier;
 
             var removedParent = _adjacentSkillsCache.Except(_adjacentSkillData);
             var addedParent = _adjacentSkillData.Except(_adjacentSkillsCache);

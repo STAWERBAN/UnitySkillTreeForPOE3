@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929d0429968f4c7d9522deea14911298, type: 3}
   m_Name: SpellBookSkill1
   m_EditorClassIdentifier: 
-  _identifier: 
-  _name: More Spell Damage
-  _price: 0
+  _identifier: 1e596300-487d-483e-b727-05b016b678f8
+  _name: More Spell Damage 1
+  _price: 1
   _description: Increase spell damage 10%
   _adjacentSkillData:
   - {fileID: 11400000, guid: b89d655f835513148b300bd2f13f20bc, type: 2}
   - {fileID: 11400000, guid: 6b98e8a4717ac35478a60589beb279d6, type: 2}
-  _persistent: 1
+  _persistent: 0

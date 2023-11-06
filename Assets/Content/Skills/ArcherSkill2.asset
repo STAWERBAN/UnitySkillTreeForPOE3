@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929d0429968f4c7d9522deea14911298, type: 3}
   m_Name: ArcherSkill2
   m_EditorClassIdentifier: 
-  _identifier: 
-  _name: Bow
+  _identifier: 4210dd29-0c44-4e21-8b94-f039155da541
+  _name: Bow 2
   _price: 2
   _description: Increase bow damage 20%
   _adjacentSkillData:

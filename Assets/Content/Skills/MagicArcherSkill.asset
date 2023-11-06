@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929d0429968f4c7d9522deea14911298, type: 3}
   m_Name: MagicArcherSkill
   m_EditorClassIdentifier: 
-  _identifier: 
-  _name: Bow
+  _identifier: 51136bb5-3db3-41bb-9e65-b57ca14ab6c3
+  _name: Magic Bow
   _price: 3
   _description: Increase spell damage with bow 50%
   _adjacentSkillData:

@@ -7,13 +7,11 @@ namespace SkillGraph.Views
 {
     public class SkillGraphView : MonoBehaviour
     {
-        public event Action Clear;
+        public event Action Clear = delegate {  };
 
-        [SerializeField]
-        private Button _clearButton;
-
-        [SerializeField]
-        private TextMeshProUGUI _skillPointBalance;
+        [SerializeField] private Button _clearButton;
+        [SerializeField] private Button _closeButton;
+        [SerializeField] private TextMeshProUGUI _skillPointBalance;
 
         private void Awake()
         {
@@ -37,7 +35,7 @@ namespace SkillGraph.Views
 
         private void ResetToDefault()
         {
-            Clear?.Invoke();
+            Clear.Invoke();
         }
     }
 }

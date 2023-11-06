@@ -8,7 +8,7 @@ using UnityEngine;
 namespace SkillGraph.Screens.Visualization
 {
     [Serializable]
-    internal class DefaultAppearance : IScreenDisplayStrategy
+    public class DefaultAppearance : IScreenDisplayStrategy
     {
         [SerializeField]
         private GameObject _content;

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using SkillGraph.Models;
 using SkillGraph.Screens.Services;
-using SkillGraph.Screens.Views;
 using SkillGraph.SkillSystem.Exceptions;
 using SkillGraph.SkillSystem.Models;
 using SkillGraph.SkillSystem.Modules;
-using SkillGraph.SkillSystem.Utilities;
 using SkillGraph.Systems;
 using SkillGraph.Views;
-using UnityEngine;
 
 namespace SkillGraph.Controllers
 {
@@ -27,15 +25,13 @@ namespace SkillGraph.Controllers
         private readonly SkillGraphView _skillGraph;
         private readonly SkillScreenView _skillScreenView;
 
-        private readonly SceneDataContainer _sceneDataContainer;
+        private readonly WarningScreenView _warningScreenView;
 
-        public SkillGraphController(IScreenService screenService,
-            SkillModule skillModule,
-            Wallet skillPointsWallet,
-            SkillWidgetView[] widgets,
-            SkillGraphView skillGraph,
-            SkillScreenView skillScreenView,
-            SceneDataContainer sceneDataContainer)
+        private List<Skill> _cashedSkillList = new();
+
+        public SkillGraphController(IScreenService screenService, SkillModule skillModule, Wallet skillPointsWallet,
+            SkillWidgetView[] widgets, SkillGraphView skillGraph, SkillScreenView skillScreenView,
+            WarningScreenView warningScreenView)
         {
             _screenService = screenService;
             _skillModule = skillModule;
@@ -46,7 +42,7 @@ namespace SkillGraph.Controllers
 
             _skillGraph = skillGraph;
             _skillScreenView = skillScreenView;
-            _sceneDataContainer = sceneDataContainer;
+            _warningScreenView = warningScreenView;
         }
 
         void IInstallable.Install()
@@ -60,7 +56,7 @@ namespace SkillGraph.Controllers
                     continue;
                 }
 
-                widget.Clicked += () => OpenSkillScreen(skill);
+                widget.Clicked += () => OpenSkillScreen(_skillModule.GetSkill(widget));
 
                 skill.Active += value => OnSkillStateChanged(widget, value);
 
@@ -69,16 +65,16 @@ namespace SkillGraph.Controllers
 
             _skillGraph.SetBalance(_skillPointsWallet.Balance);
 
+            _skillGraph.Clear += ClearTree;
             _skillPointsWallet.BalanceChanged += UpdateBalance;
-
             _skillScreenView.PurchaseClicked += PurchaseSkill;
             _skillScreenView.ResetClicked += ResetSkill;
         }
 
         void IDisposable.Dispose()
         {
+            _skillGraph.Clear -= ClearTree;
             _skillPointsWallet.BalanceChanged -= UpdateBalance;
-
             _skillScreenView.PurchaseClicked -= PurchaseSkill;
             _skillScreenView.ResetClicked -= ResetSkill;
         }
@@ -104,24 +100,32 @@ namespace SkillGraph.Controllers
         {
             try
             {
+                if (!_skillModule.Current.AdjacentSkills.Any(a => a.Active))
+                {
+                    _warningScreenView.SetMessage("Skill is not connected with head");
+                    _screenService.ShowAsync(_warningScreenView, CancellationToken.None).Forget();
+                    return;
+                }
+
                 _skillPointsWallet.Withdraw(_skillModule.Current.Price);
             }
             catch (OverdraftException exception)
             {
-                Debug.LogException(exception);
+                _warningScreenView.SetMessage(exception.Message);
 
-                _screenService.ShowAsync(_sceneDataContainer.OverdraftBalanceScreen, CancellationToken.None);
+                _screenService.ShowAsync(_warningScreenView, CancellationToken.None).Forget();
                 return;
             }
             catch (ArgumentException exception)
             {
-                Debug.LogException(exception);
+                _warningScreenView.SetMessage(exception.Message);
 
-                _screenService.ShowAsync(_sceneDataContainer.NegativeBalanceScreen, CancellationToken.None);
+                _screenService.ShowAsync(_warningScreenView, CancellationToken.None).Forget();
                 return;
             }
 
             _skillModule.Current.Active.Value = true;
+            _screenService.HideAsync(_skillScreenView, CancellationToken.None).Forget();
         }
 
         private void ResetSkill()
@@ -132,65 +136,89 @@ namespace SkillGraph.Controllers
 
                 if (skill.Persistent)
                 {
-                    _screenService.ShowAsync(_sceneDataContainer.BaseSkillResetScreen, CancellationToken.None);
+                    _warningScreenView.SetMessage("Cant to reset base skill");
+
+                    _screenService.ShowAsync(_warningScreenView, CancellationToken.None).Forget();
+
                     return;
                 }
 
-                var cashedSkillList = new List<Skill>();
-
                 foreach (var adjacentSkill in skill.AdjacentSkills)
                 {
-                    cashedSkillList.Clear();
-                    cashedSkillList.Add(adjacentSkill);
+                    _cashedSkillList.Clear();
+                    _cashedSkillList.Add(skill);
 
                     if (!adjacentSkill.Active)
                         continue;
 
-                    if (!IsSkillConnectedWithBase(adjacentSkill, cashedSkillList))
+                    if (!IsSkillConnectedWithBase(adjacentSkill))
                     {
-                        _screenService.ShowAsync(_sceneDataContainer.ResetSkillWarningScreen, CancellationToken.None);
+                        _warningScreenView.SetMessage(
+                            "Skill cant be reset because adjacent skill is not connected with head");
+
+                        _screenService.ShowAsync(_warningScreenView, CancellationToken.None).Forget();
                     }
                 }
 
+                skill.Active.Value = false;
+
                 _skillPointsWallet.Put(skill.Price);
+
+                _screenService.HideAsync(_skillScreenView, CancellationToken.None).Forget();
             }
             catch (ArgumentException exception)
             {
-                Debug.LogException(exception);
+                _warningScreenView.SetMessage(exception.Message);
 
-                _screenService.ShowAsync(_sceneDataContainer.NegativeBalanceScreen, CancellationToken.None).Forget();
+                _screenService.ShowAsync(_warningScreenView, CancellationToken.None).Forget();
             }
-            catch (SkillResetException)
+            catch (SkillResetException exception)
             {
-                _screenService.ShowAsync(_sceneDataContainer.ResetSkillWarningScreen, CancellationToken.None).Forget();
+                _warningScreenView.SetMessage(exception.Message);
+
+                _screenService.ShowAsync(_warningScreenView, CancellationToken.None).Forget();
             }
         }
 
-        private bool IsSkillConnectedWithBase(Skill verifiableSkill, List<Skill> cashedSkillList)
+        private bool IsSkillConnectedWithBase(Skill verifiableSkill)
         {
             if (verifiableSkill.Persistent)
                 return true;
 
             foreach (var adjacentSkill in verifiableSkill.AdjacentSkills)
             {
-                if (cashedSkillList.Contains(adjacentSkill))
+                if (_cashedSkillList.Contains(adjacentSkill))
                     continue;
 
-                cashedSkillList.Add(adjacentSkill);
+                _cashedSkillList.Add(adjacentSkill);
 
                 if (!adjacentSkill.Active)
                     continue;
 
-                if (IsSkillConnectedWithBase(adjacentSkill, cashedSkillList))
+                if (IsSkillConnectedWithBase(adjacentSkill))
                     return true;
             }
 
-            throw new SkillResetException();
+            throw new SkillResetException(verifiableSkill.Name);
         }
 
         private void OnSkillStateChanged(SkillWidgetView widget, bool isActivated)
         {
             widget.VisualizeStateAsync(isActivated).Forget();
+        }
+
+        private void ClearTree()
+        {
+            var skills = _skillModule.GetAllSkill();
+
+            foreach (var skill in skills)
+            {
+                if (skill.Persistent || !skill.Active) continue;
+
+                skill.Active.Value = false;
+
+                _skillPointsWallet.Put(skill.Price);
+            }
         }
     }
 }

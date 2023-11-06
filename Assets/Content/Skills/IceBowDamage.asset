@@ -16,5 +16,6 @@ MonoBehaviour:
   _name: Ice bow damage
   _price: 3
   _description: Increase ice spell damage with bow 25%
-  _adjacentSkillData: []
+  _adjacentSkillData:
+  - {fileID: 11400000, guid: e58f804b6b397cd49af9b693fbeecc1f, type: 2}
   _persistent: 0

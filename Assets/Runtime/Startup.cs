@@ -13,10 +13,11 @@ namespace SkillGraph
     public class Startup : MonoBehaviour
     {
         [SerializeField] private SkillDataContainer[] _skillDataContainer;
+        [SerializeField] private CloseScreenContainer _closeScreenContainer;
         [SerializeField] private SkillGraphView _skillGraph;
         [SerializeField] private SkillScreenView _skillScreen;
-        [SerializeField] private SceneDataContainer _sceneDataContainer;
-        [SerializeField] private CloseScreenProxy _closeScreenProxy;
+        [SerializeField] private WarningScreenView _warningScreenView;
+        [SerializeField] private SkillPointIncreaseProxy _skillPointIncreaseProxy;
 
         private IScreenService _screenService;
 
@@ -27,16 +28,17 @@ namespace SkillGraph
         {
             _screenService = new ScreenService();
 
-            _closeScreenProxy.SetScreenService(_screenService);
-
             var skillPointWallet = new Wallet();
+
+            _closeScreenContainer.SetScreenService(_screenService);
+            _skillPointIncreaseProxy.SetWallet(skillPointWallet);
 
             var skillModule = new SkillModule(_skillDataContainer);
 
             var widgets = _skillDataContainer.Select(container => container.GetWidget()).ToArray();
 
             var skillController = new SkillGraphController(_screenService, skillModule,
-                skillPointWallet, widgets, _skillGraph, _skillScreen, _sceneDataContainer);
+                skillPointWallet, widgets, _skillGraph, _skillScreen, _warningScreenView);
 
             _installers = new IInstallable[] { skillController };
             _disposables = new IDisposable[] { skillController };

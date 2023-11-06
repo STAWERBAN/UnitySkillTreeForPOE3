@@ -7,8 +7,7 @@ namespace SkillGraph.Screens.Views
 {
     public abstract class ScreenViewBase : MonoBehaviour
     {
-        [SerializeReference]
-        private IScreenDisplayStrategy _displayStrategy;
+        [SerializeReference] private IScreenDisplayStrategy _displayStrategy;
 
         private void OnValidate()
         {

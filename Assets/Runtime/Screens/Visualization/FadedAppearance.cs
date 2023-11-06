@@ -11,7 +11,7 @@ using UnityEngine;
 namespace SkillGraph.Screens.Visualization
 {
     [Serializable]
-    internal class FadedAppearance : IScreenDisplayStrategy
+    public class FadedAppearance : IScreenDisplayStrategy
     {
         [SerializeField]
         private GameObject _content;

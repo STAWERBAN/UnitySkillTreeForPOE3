@@ -4,9 +4,9 @@ namespace SkillGraph.SkillSystem.Exceptions
 {
     public class SkillResetException : Exception
     {
-        private const string Message = "Skill reset exception";
+        private const string Message = "Some of child is not connected with head : ";
 
-        public SkillResetException() : base(Message)
+        public SkillResetException(string childName) : base(Message + childName)
         {
         }
     }

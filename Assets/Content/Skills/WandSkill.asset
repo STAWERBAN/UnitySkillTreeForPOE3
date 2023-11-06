@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929d0429968f4c7d9522deea14911298, type: 3}
   m_Name: WandSkill
   m_EditorClassIdentifier: 
-  _identifier: 
+  _identifier: 4af5e0d2-9628-4349-aef4-1e8ddfefb2b0
   _name: Wand Damage
   _price: 5
   _description: Increase damage with wand 50%

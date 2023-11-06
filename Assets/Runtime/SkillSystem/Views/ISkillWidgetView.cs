@@ -1,4 +1,6 @@
-﻿namespace SkillGraph.SkillSystem.Views
+﻿using System;
+
+namespace SkillGraph.SkillSystem.Views
 {
     public interface ISkillWidgetView
     {

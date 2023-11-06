@@ -28,21 +28,33 @@ namespace SkillGraph.SkillSystem.Modules
 
                 if (skill == null)
                     continue;
+                
+                var adjacentSkills = new Skill[skillData.AdjacentSkillData.Length];
 
-                skill.AdjacentSkills = skillData.AdjacentSkillData.Select(GetSkill).ToArray();
+                for (var i = 0; i < skillData.AdjacentSkillData.Length; i++)
+                {
+                    adjacentSkills[i] = GetSkill(skillData.AdjacentSkillData[i]);
+                }
+
+                skill.AdjacentSkills = adjacentSkills;
             }
         }
 
         [CanBeNull]
         public Skill GetSkill(ISkillWidgetView widget)
         {
-            return _skillViewModels.FirstOrDefault(vM => vM.Widget == widget)?.Skill;
+            return _skillViewModels.FirstOrDefault(viewModel => viewModel.Widget == widget)?.Skill;
         }
 
         [CanBeNull]
         public Skill GetSkill(SkillData skillData)
         {
-            return _skillViewModels.FirstOrDefault(vM => vM.Skill.Equals(skillData))?.Skill;
+            return _skillViewModels.FirstOrDefault(viewModel => viewModel.Skill.Equals(skillData))?.Skill;
+        }
+
+        public IEnumerable<Skill> GetAllSkill()
+        {
+            return _skillViewModels.Select(a => a.Skill);
         }
     }
 }

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929d0429968f4c7d9522deea14911298, type: 3}
   m_Name: ArcherSkill5
   m_EditorClassIdentifier: 
-  _identifier: 
-  _name: Bow
+  _identifier: e99a2b56-ee8e-4abb-a229-8ed81c617753
+  _name: Bow 5
   _price: 5
   _description: You can fire additional arrow
-  _adjacentSkillData: []
+  _adjacentSkillData:
+  - {fileID: 11400000, guid: 8dbdfdcd919bf1e4cb90f7157799c2c0, type: 2}
   _persistent: 0
