@@ -41,7 +41,7 @@ namespace SkillGraph
                 skillPointWallet, widgets, _skillGraph, _skillScreen, _warningScreenView);
 
             _installers = new IInstallable[] { skillController };
-            _disposables = new IDisposable[] { skillController, skillModule };
+            _disposables = new IDisposable[] { skillController, skillModule, skillPointWallet };
         }
 
         private void Start()

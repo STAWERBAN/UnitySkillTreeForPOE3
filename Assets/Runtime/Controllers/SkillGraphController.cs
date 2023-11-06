@@ -29,15 +29,12 @@ namespace SkillGraph.Controllers
             SkillWidgetView[] widgets, SkillGraphView skillGraph, SkillScreenView skillScreenView,
             WarningScreenView warningScreenView)
         {
-            _screenService = screenService;
-            _skillModule = skillModule;
-
-            _skillPointsWallet = skillPointsWallet;
-
             _widgets = widgets;
-
             _skillGraph = skillGraph;
+            _skillModule = skillModule;
+            _screenService = screenService;
             _skillScreenView = skillScreenView;
+            _skillPointsWallet = skillPointsWallet;
             _warningScreenView = warningScreenView;
         }
 

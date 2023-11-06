@@ -15,7 +15,7 @@ namespace SkillGraph.SkillSystem.Data
         [SerializeField] private string _description;
         [SerializeField] private List<SkillData> _adjacentSkillData;
         [SerializeField] private bool _persistent;
-        
+
         public string Identifier => _identifier;
 
         internal string Name => _name;
@@ -23,7 +23,6 @@ namespace SkillGraph.SkillSystem.Data
         internal string Description => _description;
         internal SkillData[] AdjacentSkillData => _adjacentSkillData.ToArray();
         internal bool Persistent => _persistent;
-
 
 #if UNITY_EDITOR
         private SkillData[] _adjacentSkillsCache = Array.Empty<SkillData>();

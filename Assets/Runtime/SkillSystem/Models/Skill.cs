@@ -20,7 +20,7 @@ namespace SkillGraph.SkillSystem.Models
 
         private readonly string _identifier;
 
-        internal Skill(string identifier)
+        private Skill(string identifier)
         {
             Active = new ObservableProperty<bool>();
             AdjacentSkills = Array.Empty<Skill>();
